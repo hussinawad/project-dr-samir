@@ -1,0 +1,108 @@
+namespace ConsoleApp82
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+
+
+            {
+                // Read in the number of items
+                Console.Write("Enter the number of items: ");
+                int n = int.Parse(Console.ReadLine());
+
+                // Read in the values
+                int[] values = new int[n];
+                for (int i = 0; i < n; i++)
+                {
+                    Console.Write("Enter value {0}: ", i + 1);
+                    values[i] = int.Parse(Console.ReadLine());
+                }
+
+                Array.Sort(values);
+
+                // Calculate the median
+                double median;
+                if (n % 2 == 0)
+                {
+                    // If there are an even number of items, average the middle two
+                    int mid1 = n / 2 - 1;
+                    int mid2 = n / 2;
+                    median = (values[mid1] + values[mid2]) / 2.0;
+                }
+                else
+                {
+                    // If there are an odd number of items, take the middle one
+                    int mid = n / 2;
+                    median = values[mid];
+                }
+                Console.WriteLine("Median: {0}", median);
+
+                // Calculate the mode
+                int mode = values.GroupBy(v => v)
+                                 .OrderByDescending(g => g.Count())
+                                 .Select(g => g.Key)
+                                 .FirstOrDefault();
+                Console.WriteLine("Mode: {0}", mode);
+
+                // Calculate the range
+                int range = values.Max() - values.Min();
+                Console.WriteLine("Range: {0}", range);
+
+                // Calculate the quartiles
+                int q1, q3;
+                if (n % 2 == 0)
+                {
+                    // If there are an even number of items, split at the median
+                    int[] lowerHalf = values.Take(n / 2).ToArray();
+                    int[] upperHalf = values.Skip(n / 2).ToArray();
+
+                    if (lowerHalf.Length % 2 == 0)
+                    {
+                        q1 = (lowerHalf[lowerHalf.Length / 2 - 1] + lowerHalf[lowerHalf.Length / 2]) / 2;
+                    }
+                    else
+                    {
+                        q1 = lowerHalf[lowerHalf.Length / 2];
+                    }
+
+                    if (upperHalf.Length % 2 == 0)
+                    {
+                        q3 = (upperHalf[upperHalf.Length / 2 - 1] + upperHalf[upperHalf.Length / 2]) / 2;
+                    }
+                    else
+                    {
+                        q3 = upperHalf[upperHalf.Length / 2];
+                    }
+                }
+                else
+                {
+                    // If there are an odd number of items, split at the median excluding the median
+                    int[] lowerHalf = values.Take(n / 2).ToArray();
+                    int[] upperHalf = values.Skip(n / 2 + 1).ToArray();
+
+                    if (lowerHalf.Length % 2 == 0)
+                    {
+                        q1 = (lowerHalf[lowerHalf.Length / 2 - 1] + lowerHalf[lowerHalf.Length / 2]) / 2;
+                    }
+                    else
+                    {
+                        q1 = lowerHalf[lowerHalf.Length / 2];
+                    }
+
+                    if (upperHalf.Length % 2 == 0)
+                    {
+                        q3 = (upperHalf[upperHalf.Length / 2 - 1] + upperHalf[upperHalf.Length / 2]) / 2;
+                    }
+                    else
+                    {
+                        q3 = upperHalf[upperHalf.Length / 2];
+                    }
+                }
+                Console.WriteLine("First Quartile: {0}", q1);
+
+            }
+        }
+    }
+}
+        
